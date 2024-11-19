@@ -9,7 +9,7 @@ const Url = require("./models/url"); // Importa o modelo Url
 const app = express();
 app.use(express.json());
 
-// Modelo do MongoDB para URLs
+// Modelo do MongoDB para URLs useNewUrlParser
 const UrlSchema = new mongoose.Schema({
   longUrl: {
     type: String,
@@ -81,10 +81,7 @@ if (!MONGO_URI) {
 }
 
 mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGO_URI, {})
   .then(() => {
     console.log("Conectado ao MongoDB com sucesso!");
     app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
