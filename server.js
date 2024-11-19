@@ -10,7 +10,7 @@ const Url = require("./models/url"); // Importa o modelo Url
 const app = express();
 app.use(express.json());
 
-router.post("/shorten", async (req, res) => {
+router.post("/api/shorten", async (req, res) => {
   const { longUrl } = req.body;
 
   // Modelo do MongoDB para URLs useNewUrlParser
