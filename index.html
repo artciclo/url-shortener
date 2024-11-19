@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encurtador de URL</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
+      h1 {
+        font-size: 24px;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Encurtador de URL</h1>
+      <div class="form-group">
+        <label for="longUrl">Insira a URL longa:</label>
+        <input
+          type="url"
+          id="longUrl"
+          placeholder="Digite a URL longa"
+          required
+        />
+      </div>
+      <button id="shortenBtn">Encurtar URL</button>
+
+      <div class="result" id="result"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("shortenBtn")
+        .addEventListener("click", async function () {
+          const longUrl = document.getElementById("longUrl").value;
+          const resultDiv = document.getElementById("result");
+
+          if (!longUrl) {
+            resultDiv.innerHTML =
+              '<span class="error">Por favor, insira uma URL válida.</span>';
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/shorten", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ longUrl }),
+            });
+
+            const data = await response.json();
+
+            if (response.status === 201) {
+              resultDiv.innerHTML = `<strong>URL Curta:</strong> <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+            } else {
+              resultDiv.innerHTML = `<span class="error">${data.message}</span>`;
+            }
+          } catch (error) {
+            resultDiv.innerHTML =
+              '<span class="error">Erro ao encurtar a URL. Tente novamente.</span>';
+          }
+        });
+    </script>
+  </body>
+</html>
